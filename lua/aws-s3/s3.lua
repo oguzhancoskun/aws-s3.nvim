@@ -37,7 +37,7 @@ local function s3_create(remote_path, profile)
   end
 end
 
-local function s3_create_command()
+local function create()
   vim.ui.input({prompt = 'Enter Remote Path: '}, function(remote_path)
     if not remote_path or remote_path == '' then
       send_notification("Remote path is required.", vim.log.levels.ERROR)
@@ -55,7 +55,7 @@ local function s3_create_command()
   end)
 end
 
-M.s3_create_command = s3_create_command
+M.create = create
 
 return M
 
