@@ -59,7 +59,7 @@ local function s3_create(remote_path, profile)
     end)
 
   local file_path = get_active_file_path()
-  local command = string.format("aws s3 cp %s s3://%s --profile %s > /dev/null 2>&1 ; echo $?",
+  local command = string.format("aws s3 cp %s s3://%s --profile %s",
   file_path, remote_path, profile)
   local success = os.execute(command)
   if success then
