@@ -2,11 +2,15 @@
 local M = {}
 
 local use_fidget = false
+local region = "eu-west-1"
+
 
 function M.setup(options)
   if options and options.fidget then
     use_fidget = true
   end
+  if options and options.aws_region then
+    region = options.aws_region
 end
 
 local function send_notification(message, level)
@@ -27,9 +31,8 @@ local function get_active_file_path()
 end
 
 local function s3_create_bucket(bucket_name, profile)
-  --local command = string.format("aws s3api create-bucket --bucket %s --profile %s > /dev/null 2>&1 ; echo $?",
-  local command = string.format("aws s3api create-bucket --bucket %s --profile %s",
- bucket_name, profile)
+  local command = string.format("aws s3api create-bucket --bucket %s --region %s --create-bucket-configuration LocationConstraint=%s --profile %s > /dev/null 2>&1 ; echo $?",
+ bucket_name, region, region, profile)
   local success = os.execute(command)
   if success then
     send_notification("Bucket successfully created: " .. bucket_name, vim.log.levels.INFO)

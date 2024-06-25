@@ -28,7 +28,8 @@ Plug 'oguzhancoskun/aws-s3.nvim'
 
 ```lua
 requre('aws-s3').setup{
-  fidget = true, -- if you want to see the outputs on fidget
+  fidget = true, -- if you want to see the outputs on fidget (optional)
+  aws_region = 'eu-west-1' -- default value is 'eu-west-1' (optional)
 }
 ```
 
