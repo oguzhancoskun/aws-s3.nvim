@@ -59,7 +59,8 @@ local function s3_create(remote_path, profile)
     end)
 
   local file_path = get_active_file_path()
-  local command = string.format("aws s3 cp %s s3://%s --profile %s", bucket_name, remote_path, profile)
+  local command = string.format("aws s3 cp %s s3://%s --profile %s",
+  file_path, remote_path, profile)
   local success = os.execute(command)
   if success then
     send_notification("File successfully uploaded to S3: " .. remote_path, vim.log.levels.INFO)
