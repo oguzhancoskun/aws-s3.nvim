@@ -27,7 +27,8 @@ local function get_active_file_path()
 end
 
 local function s3_create_bucket(bucket_name, profile)
-  local command = string.format("aws s3api create-bucket --bucket %s --profile %s > /dev/null 2>&1 ; echo $?",
+  --local command = string.format("aws s3api create-bucket --bucket %s --profile %s > /dev/null 2>&1 ; echo $?",
+  local command = string.format("aws s3api create-bucket --bucket %s --profile %s",
  bucket_name, profile)
   local success = os.execute(command)
   if success then
