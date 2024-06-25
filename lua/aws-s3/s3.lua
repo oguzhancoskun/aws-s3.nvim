@@ -49,14 +49,15 @@ local function s3_create(remote_path, profile)
   local bucket_name = remote_path:match("([^/]+)")
 
   if not s3_check_bucket_exists(bucket_name, profile) then
-    vim.ui.input({prompt = 'Bucket does not exist. Do you want to create it? (y/n): '}, function(response)
-      if response == 'y' then
+    vim.ui.input({prompt = 'Bucket does not exist. Do you want to create it? (y/n): '}, function(answer)
+      if answer == 'y' then
         s3_create_bucket(bucket_name, profile)
       else
         send_notification("Bucket does not exist. Aborting upload.", vim.log.levels.ERROR)
         return
       end
     end)
+  end
 
   local file_path = get_active_file_path()
   local command = string.format("aws s3 cp %s s3://%s --profile %s",
@@ -90,4 +91,3 @@ end
 M.create = create
 
 return M
-
