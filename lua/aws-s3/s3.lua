@@ -11,6 +11,7 @@ function M.setup(options)
   end
   if options and options.aws_region then
     region = options.aws_region
+  end
 end
 
 local function send_notification(message, level)
