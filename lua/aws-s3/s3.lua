@@ -26,9 +26,35 @@ local function get_active_file_path()
   return vim.fn.expand('%:p')
 end
 
+local function s3_create_bucket(bucket_name, profile)
+  local command = string.format("aws s3api create-bucket --bucket %s --profile %s > /dev/null 2>&1 ; echo $?",
+ bucket_name, profile)
+  local success = os.execute(command)
+  if success then
+    send_notification("Bucket successfully created: " .. bucket_name, vim.log.levels.INFO)
+  else
+    send_notification("Failed to create bucket: " .. bucket_name, vim.log.levels.ERROR)
+  end
+end
+
+local function s3_check_bucket_exists(bucket_name, profile)
+  local command = string.format("aws s3api head-bucket --bucket %s --profile %s > /dev/null 2>&1 ; echo $?",
+ bucket_name, profile)
+  local success = os.execute(command)
+  return success
+end
+
 local function s3_create(remote_path, profile)
+
+  local bucket_name = remote_path:match("([^/]+)")
+
+  if not s3_check_bucket_exists(bucket_name, profile) then
+    s3_create_bucket(bucket_name, profile)
+  end
+
   local file_path = get_active_file_path()
-  local command = string.format("aws s3 cp %s s3://%s --profile %s", file_path, remote_path, profile)
+  local command = string.format("aws s3 cp %s s3://%s --profile %s > /dev/null 2>&1 ; echo $?",
+  file_path, remote_path, profile)
   local success = os.execute(command)
   if success then
     send_notification("File successfully uploaded to S3: " .. remote_path, vim.log.levels.INFO)
